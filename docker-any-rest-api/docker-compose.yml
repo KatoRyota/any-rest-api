@@ -1,0 +1,53 @@
+version: '3'
+services:
+  oracle-db:
+    build:
+      context: ../../docker-images/OracleDatabase/SingleInstance/dockerfiles/12.2.0.1
+      args:
+        DB_EDITION: ee
+    image: oracle/database:12.2.0.1-ee
+    container_name: oracle-db
+    hostname: oracle-db
+    volumes:
+      - oracle-db/oradata:/opt/oracle/oradata
+      - oracle-db/customscripts:/opt/oracle/scripts/setup
+    ports:
+      - "1521:1521"
+      - "5500:5500"
+    environment:
+      - TZ=Asia/Tokyo
+      - LANGUAGE=ja_JP.ja
+      - LANG=ja_JP.UTF-8
+      - ORACLE_SID=ORCLCDB
+      - ORACLE_PDB=ORCLPDB1
+      - ORACLE_PWD=ORCLPWD
+      - ORACLE_CHARACTERSET=AL32UTF8
+      - NLS_LANG=Japanese_Japan.AL32UTF8
+  any-rest-api:
+    build:
+      context: ..
+      dockerfile: docker-any-rest-api/any-rest-api/Dockerfile
+    image: any-rest-api
+    container_name: any-rest-api
+    hostname: any-rest-api
+    volumes:
+      - docker-any-rest-api/any-rest-api/config:/app/config
+      - docker-any-rest-api/any-rest-api/logs:/app/logs
+    links:
+      - mock-any-rest-api:mock-any-rest-api
+    ports:
+      - "50000:8080"
+    depends_on:
+      - oracle-db
+  mock-any-rest-api:
+    build:
+      context: ..
+      dockerfile: docker-any-rest-api/mock-any-rest-api/Dockerfile
+    image: mock-any-rest-api
+    container_name: mock-any-rest-api
+    hostname: mock-any-rest-api
+    volumes:
+      - docker-any-rest-api/mock-any-rest-api/config:/app/config
+      - docker-any-rest-api/mock-any-rest-api/logs:/app/logs
+    ports:
+      - "50001:8080"
