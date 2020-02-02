@@ -168,4 +168,25 @@ docker exec -it oracle-db bash
     - PDBADMIN
 パスワード: oracle
 ```
-  
+
+## curlで疎通確認したい
+```shell script
+curl -s -X POST \
+    -H "Content-Type: application/json" \
+    -d '{
+          "userName":"KatoRytoa",
+          "authKey":"admin",
+          "payload":{
+              "id":"ID-000-000",
+              "name":"NAME-000-0000",
+              "type":"TYPE-000-0000"
+          }
+        }' \
+    http://192.168.99.100:50001/getAny
+```
+```shell script
+curl -s -X POST \
+    -H "Content-Type: application/json" \
+    -d '{"userName":"KatoRytoa"}' \
+    http://192.168.99.100:50001/getAny
+```

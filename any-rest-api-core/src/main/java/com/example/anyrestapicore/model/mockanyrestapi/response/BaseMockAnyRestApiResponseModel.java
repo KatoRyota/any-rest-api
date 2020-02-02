@@ -7,8 +7,40 @@ import java.util.List;
 
 public class BaseMockAnyRestApiResponseModel<T> {
 
-    public String status;
-    public String message;
-    public T payload;
-    public List<MockAnyRestApiErrorModel> errors;
+    private String status;
+    private String message;
+    private T payload;
+    private List<MockAnyRestApiErrorModel> errors;
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
+    public T getPayload() {
+        return payload;
+    }
+
+    public void setPayload(T payload) {
+        this.payload = payload;
+    }
+
+    public List<MockAnyRestApiErrorModel> getErrors() {
+        return errors;
+    }
+
+    public void setErrors(List<MockAnyRestApiErrorModel> errors) {
+        this.errors = errors;
+    }
 }

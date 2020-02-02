@@ -3,6 +3,7 @@ package com.example.anyrestapi.service;
 import com.example.anyrestapicore.model.common.AnyDataModel;
 import com.example.anyrestapicore.model.request.BaseRequestModel;
 import com.example.anyrestapicore.model.response.BaseResponseModel;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -18,31 +19,37 @@ public abstract class BaseService<
     private static final Logger performanceLogger = LoggerFactory.getLogger("performance");
 
     public T2 process(T1 request) {
+        try {
+            logger.info("[start] {}", this.getClass().getCanonicalName());
+            LocalTime startTime = LocalTime.now();
+            restLogger.info("request->[{}]", new ObjectMapper().writeValueAsString(request));
 
-        logger.info("[start] {}", this.getClass().getCanonicalName());
-        LocalTime startTime = LocalTime.now();
-        restLogger.info("request->[{}]", request.toString());
+            T2 response = createResponseModel();
 
-        T2 response = createResponseModel();
+            if (!validate(request, response)) {
+                logger.info("Request parameter is invalid.:request->[{}],response->[{}]",
+                        new ObjectMapper().writeValueAsString(request),
+                        new ObjectMapper().writeValueAsString(response));
 
-        if (!validate(request, response)) {
-            logger.info("Request parameter is invalid.:request->[{}],response->[{}]",
-                    request.toString(), response.toString());
+                logger.info("[end] {}", this.getClass().getCanonicalName());
+
+                return response;
+            }
+
+            AnyDataModel anyDataModel = createIntermediateObject(request);
+            execute(request, response, anyDataModel);
+
+            restLogger.info("response->[{}]", response.toString());
+            LocalTime endTime = LocalTime.now();
+            long processTime = ChronoUnit.SECONDS.between(startTime, endTime);
+            performanceLogger.info("processTime->[{}]", processTime);
             logger.info("[end] {}", this.getClass().getCanonicalName());
 
             return response;
+
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
-
-        AnyDataModel anyDataModel = createIntermediateObject(request);
-        execute(request, response, anyDataModel);
-
-        restLogger.info("response->[{}]", response.toString());
-        LocalTime endTime = LocalTime.now();
-        long processTime = ChronoUnit.SECONDS.between(startTime, endTime);
-        performanceLogger.info("processTime->[{}]", processTime);
-        logger.info("[end] {}", this.getClass().getCanonicalName());
-
-        return response;
     }
 
     protected abstract T2 createResponseModel();

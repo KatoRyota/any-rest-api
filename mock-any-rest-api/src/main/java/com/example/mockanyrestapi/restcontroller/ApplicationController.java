@@ -6,6 +6,7 @@ import com.example.anyrestapicore.model.mockanyrestapi.response.BaseMockAnyRestA
 import com.example.anyrestapicore.model.mockanyrestapi.response.payload.MockAnyRestApiGetResponseModel;
 import com.example.mockanyrestapi.service.impl.MockAnyRestApiGetService;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -19,7 +20,7 @@ public class ApplicationController {
 
     @PostMapping("getAny")
     public BaseMockAnyRestApiResponseModel<MockAnyRestApiGetResponseModel> getAny(
-            BaseMockAnyRestApiRequestModel<MockAnyRestApiGetRequestModel> request) {
+            @RequestBody BaseMockAnyRestApiRequestModel<MockAnyRestApiGetRequestModel> request) {
 
         return this.anyGetService.process(request);
     }

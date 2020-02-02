@@ -29,18 +29,22 @@ public class AnyUpdateService extends BaseService<
 
     @Override
     protected BaseResponseModel<AnyUpdateResponseModel> createResponseModel() {
-        return null;
+        return new BaseResponseModel<>();
     }
 
     @Override
     protected boolean validate(BaseRequestModel<AnyUpdateRequestModel> request,
                                BaseResponseModel<AnyUpdateResponseModel> response) {
-        return false;
+        return true;
     }
 
     @Override
     protected AnyDataModel createIntermediateObject(BaseRequestModel<AnyUpdateRequestModel> request) {
-        return null;
+        AnyDataModel anyDataModel = new AnyDataModel();
+        anyDataModel.id = "ID";
+        anyDataModel.name = "NAME";
+        anyDataModel.type = "TYPE";
+        return anyDataModel;
     }
 
     @Override

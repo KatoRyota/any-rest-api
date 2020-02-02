@@ -9,6 +9,7 @@ import com.example.anyrestapicore.model.response.BaseResponseModel;
 import com.example.anyrestapicore.model.response.payload.AnyGetResponseModel;
 import com.example.anyrestapicore.model.response.payload.AnyUpdateResponseModel;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -23,12 +24,16 @@ public class ApplicationController {
     }
 
     @PostMapping("getAny")
-    public BaseResponseModel<AnyGetResponseModel> getAny(BaseRequestModel<AnyGetRequestModel> request) {
+    public BaseResponseModel<AnyGetResponseModel> getAny(
+            @RequestBody BaseRequestModel<AnyGetRequestModel> request) {
+
         return this.anyGetService.process(request);
     }
 
     @PostMapping("updateAny")
-    public BaseResponseModel<AnyUpdateResponseModel> updateAny(BaseRequestModel<AnyUpdateRequestModel> request) {
+    public BaseResponseModel<AnyUpdateResponseModel> updateAny(
+            @RequestBody BaseRequestModel<AnyUpdateRequestModel> request) {
+
         return this.anyUpdateService.process(request);
     }
 }

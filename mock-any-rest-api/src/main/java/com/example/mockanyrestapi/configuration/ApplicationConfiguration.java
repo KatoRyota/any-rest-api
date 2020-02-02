@@ -6,8 +6,8 @@ import org.springframework.context.annotation.PropertySources;
 
 @Configuration
 @PropertySources({
-        @PropertySource("file:config/application.properties"),
-        @PropertySource("file:config/error.properties")
+        @PropertySource("classpath:application.properties"),
+        @PropertySource("classpath:error.properties")
 })
 public class ApplicationConfiguration {
 }
