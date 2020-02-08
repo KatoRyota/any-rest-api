@@ -1,8 +1,8 @@
 package com.example.anyrestapi.service;
 
 import com.example.anyrestapicore.model.common.AnyDataModel;
-import com.example.anyrestapicore.model.request.BaseRequestModel;
-import com.example.anyrestapicore.model.response.BaseResponseModel;
+import com.example.anyrestapicore.bean.request.BaseRequestModel;
+import com.example.anyrestapicore.bean.response.BaseResponseModel;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

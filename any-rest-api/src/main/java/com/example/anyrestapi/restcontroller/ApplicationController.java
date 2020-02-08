@@ -2,12 +2,12 @@ package com.example.anyrestapi.restcontroller;
 
 import com.example.anyrestapi.service.impl.AnyGetService;
 import com.example.anyrestapi.service.impl.AnyUpdateService;
-import com.example.anyrestapicore.model.request.BaseRequestModel;
-import com.example.anyrestapicore.model.request.payload.AnyGetRequestModel;
-import com.example.anyrestapicore.model.request.payload.AnyUpdateRequestModel;
-import com.example.anyrestapicore.model.response.BaseResponseModel;
-import com.example.anyrestapicore.model.response.payload.AnyGetResponseModel;
-import com.example.anyrestapicore.model.response.payload.AnyUpdateResponseModel;
+import com.example.anyrestapicore.bean.request.BaseRequestModel;
+import com.example.anyrestapicore.bean.request.payload.AnyGetRequestModel;
+import com.example.anyrestapicore.bean.request.payload.AnyUpdateRequestModel;
+import com.example.anyrestapicore.bean.response.BaseResponseModel;
+import com.example.anyrestapicore.bean.response.payload.AnyGetResponseModel;
+import com.example.anyrestapicore.bean.response.payload.AnyUpdateResponseModel;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
