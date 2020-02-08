@@ -1,18 +1,19 @@
 package com.example.anyrestapi.service;
 
+import com.example.anyrestapicore.bean.request.BaseRequestBean;
+import com.example.anyrestapicore.bean.response.BaseResponseBean;
 import com.example.anyrestapicore.model.common.AnyDataModel;
-import com.example.anyrestapicore.bean.request.BaseRequestModel;
-import com.example.anyrestapicore.bean.response.BaseResponseModel;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
+import java.util.List;
 
 public abstract class BaseService<
-        T1 extends BaseRequestModel<?>,
-        T2 extends BaseResponseModel<?>> {
+        T1 extends BaseRequestBean<?>,
+        T2 extends BaseResponseBean<?>> {
 
     private static final Logger logger = LoggerFactory.getLogger(BaseService.class);
     private static final Logger restLogger = LoggerFactory.getLogger("rest");
@@ -24,7 +25,7 @@ public abstract class BaseService<
             LocalTime startTime = LocalTime.now();
             restLogger.info("request->[{}]", new ObjectMapper().writeValueAsString(request));
 
-            T2 response = createResponseModel();
+            T2 response = createResponse();
 
             if (!validate(request, response)) {
                 logger.info("Request parameter is invalid.:request->[{}],response->[{}]",
@@ -36,10 +37,10 @@ public abstract class BaseService<
                 return response;
             }
 
-            AnyDataModel anyDataModel = createIntermediateObject(request);
-            execute(request, response, anyDataModel);
+            List<AnyDataModel> anyDataModels = createIntermediateObject(request);
+            execute(request, response, anyDataModels);
 
-            restLogger.info("response->[{}]", response.toString());
+            restLogger.info("response->[{}]", new ObjectMapper().writeValueAsString(response));
             LocalTime endTime = LocalTime.now();
             long processTime = ChronoUnit.SECONDS.between(startTime, endTime);
             performanceLogger.info("processTime->[{}]", processTime);
@@ -52,11 +53,11 @@ public abstract class BaseService<
         }
     }
 
-    protected abstract T2 createResponseModel();
+    protected abstract T2 createResponse();
 
     protected abstract boolean validate(T1 request, T2 response);
 
-    protected abstract AnyDataModel createIntermediateObject(T1 request);
+    protected abstract List<AnyDataModel> createIntermediateObject(T1 request);
 
-    protected abstract void execute(T1 request, T2 response, AnyDataModel anyDataModel);
+    protected abstract void execute(T1 request, T2 response, List<AnyDataModel> anyDataModels);
 }

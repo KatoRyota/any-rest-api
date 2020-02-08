@@ -5,12 +5,16 @@
     </formats>
     <fileSets>
         <fileSet>
-            <directory>src/main/resources/common</directory>
+            <directory>src/main/resources/common/config</directory>
             <outputDirectory>config</outputDirectory>
         </fileSet>
         <fileSet>
-            <directory>src/main/resources/staging</directory>
+            <directory>src/main/resources/staging/config</directory>
             <outputDirectory>config</outputDirectory>
+        </fileSet>
+        <fileSet>
+            <directory>src/main/resources/staging/data</directory>
+            <outputDirectory>data</outputDirectory>
         </fileSet>
     </fileSets>
     <files>

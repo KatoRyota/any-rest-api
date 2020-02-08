@@ -1,7 +1,7 @@
 package com.example.mockanyrestapi.service;
 
-import com.example.anyrestapicore.bean.mockanyrestapi.request.MockAnyRestApiBaseRequestModel;
-import com.example.anyrestapicore.bean.mockanyrestapi.response.MockAnyRestApiBaseResponseModel;
+import com.example.anyrestapicore.bean.mockanyrestapi.request.MockAnyRestApiBaseRequestBean;
+import com.example.anyrestapicore.bean.mockanyrestapi.response.MockAnyRestApiBaseResponseBean;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,8 +10,8 @@ import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
 
 public abstract class BaseMockAnyRestApiService<
-        T1 extends MockAnyRestApiBaseRequestModel<?>,
-        T2 extends MockAnyRestApiBaseResponseModel<?>> {
+        T1 extends MockAnyRestApiBaseRequestBean<?>,
+        T2 extends MockAnyRestApiBaseResponseBean<?>> {
 
     private static final Logger logger = LoggerFactory.getLogger(BaseMockAnyRestApiService.class);
     private static final Logger restLogger = LoggerFactory.getLogger("rest");

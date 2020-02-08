@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration debug="true" scan="true" scanPeriod="30 seconds">
+
+    <include resource="org/springframework/boot/logging/logback/base.xml"/>
+
+    <property name="LOG_FILE_APPLICATION" value="logs/application.log}"/>
+    <property name="LOG_FILE_REST" value="logs/rest.log}"/>
+    <property name="LOG_FILE_PERFORMANCE" value="logs/performance.log}"/>
+
+    <appender name="FILE_APPLICATION"
+              class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <encoder>
+            <pattern>${FILE_LOG_PATTERN}</pattern>
+        </encoder>
+        <file>${LOG_FILE_APPLICATION}</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <cleanHistoryOnStart>${LOG_FILE_CLEAN_HISTORY_ON_START:-false}</cleanHistoryOnStart>
+            <fileNamePattern>${ROLLING_FILE_NAME_PATTERN:-${LOG_FILE_APPLICATION}.%d{yyyy-MM-dd}.%i.gz}
+            </fileNamePattern>
+            <maxFileSize>${LOG_FILE_MAX_SIZE:-10MB}</maxFileSize>
+            <maxHistory>${LOG_FILE_MAX_HISTORY:-7}</maxHistory>
+            <totalSizeCap>${LOG_FILE_TOTAL_SIZE_CAP:-0}</totalSizeCap>
+        </rollingPolicy>
+    </appender>
+
+    <appender name="FILE_REST"
+              class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <encoder>
+            <pattern>${FILE_LOG_PATTERN}</pattern>
+        </encoder>
+        <file>${LOG_FILE_REST}</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <cleanHistoryOnStart>${LOG_FILE_CLEAN_HISTORY_ON_START:-false}</cleanHistoryOnStart>
+            <fileNamePattern>${ROLLING_FILE_NAME_PATTERN:-${LOG_FILE_REST}.%d{yyyy-MM-dd}.%i.gz}
+            </fileNamePattern>
+            <maxFileSize>${LOG_FILE_MAX_SIZE:-10MB}</maxFileSize>
+            <maxHistory>${LOG_FILE_MAX_HISTORY:-7}</maxHistory>
+            <totalSizeCap>${LOG_FILE_TOTAL_SIZE_CAP:-0}</totalSizeCap>
+        </rollingPolicy>
+    </appender>
+
+    <appender name="FILE_PERFORMANCE"
+              class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <encoder>
+            <pattern>${FILE_LOG_PATTERN}</pattern>
+        </encoder>
+        <file>${LOG_FILE_PERFORMANCE}</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <cleanHistoryOnStart>${LOG_FILE_CLEAN_HISTORY_ON_START:-false}</cleanHistoryOnStart>
+            <fileNamePattern>${ROLLING_FILE_NAME_PATTERN:-${LOG_FILE_PERFORMANCE}.%d{yyyy-MM-dd}.%i.gz}
+            </fileNamePattern>
+            <maxFileSize>${LOG_FILE_MAX_SIZE:-10MB}</maxFileSize>
+            <maxHistory>${LOG_FILE_MAX_HISTORY:-7}</maxHistory>
+            <totalSizeCap>${LOG_FILE_TOTAL_SIZE_CAP:-0}</totalSizeCap>
+        </rollingPolicy>
+    </appender>
+
+    <logger name="com.example.mockanyrestapi" level="DEBUG" additivity="false">
+        <appender-ref ref="FILE_APPLICATION"/>
+    </logger>
+
+    <logger name="rest" level="INFO" additivity="false">
+        <appender-ref ref="FILE_REST"/>
+    </logger>
+
+    <logger name="performance" level="INFO" additivity="false">
+        <appender-ref ref="FILE_PERFORMANCE"/>
+    </logger>
+
+    <root level="DEBUG">
+        <appender-ref ref="CONSOLE"/>
+        <appender-ref ref="FILE_APPLICATION"/>
+    </root>
+
+</configuration>
