@@ -1,9 +1,9 @@
 package com.example.mockanyrestapi.service.impl;
 
-import com.example.anyrestapicore.model.mockanyrestapi.request.BaseMockAnyRestApiRequestModel;
-import com.example.anyrestapicore.model.mockanyrestapi.request.payload.MockAnyRestApiGetRequestModel;
-import com.example.anyrestapicore.model.mockanyrestapi.response.BaseMockAnyRestApiResponseModel;
-import com.example.anyrestapicore.model.mockanyrestapi.response.payload.MockAnyRestApiGetResponseModel;
+import com.example.anyrestapicore.bean.mockanyrestapi.request.MockAnyRestApiBaseRequestModel;
+import com.example.anyrestapicore.bean.mockanyrestapi.request.payload.MockAnyRestApiGetRequestModel;
+import com.example.anyrestapicore.bean.mockanyrestapi.response.MockAnyRestApiBaseResponseModel;
+import com.example.anyrestapicore.bean.mockanyrestapi.response.payload.MockAnyRestApiGetResponseModel;
 import com.example.mockanyrestapi.service.BaseMockAnyRestApiService;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -16,8 +16,8 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class MockAnyRestApiGetService extends BaseMockAnyRestApiService<
-        BaseMockAnyRestApiRequestModel<MockAnyRestApiGetRequestModel>,
-        BaseMockAnyRestApiResponseModel<MockAnyRestApiGetResponseModel>> {
+        MockAnyRestApiBaseRequestModel<MockAnyRestApiGetRequestModel>,
+        MockAnyRestApiBaseResponseModel<MockAnyRestApiGetResponseModel>> {
 
     private static final Logger logger = LoggerFactory.getLogger(MockAnyRestApiGetService.class);
     private final Environment env;
@@ -28,23 +28,23 @@ public class MockAnyRestApiGetService extends BaseMockAnyRestApiService<
     }
 
     @Override
-    protected BaseMockAnyRestApiResponseModel<MockAnyRestApiGetResponseModel> createResponseModel() {
-        return new BaseMockAnyRestApiResponseModel<>();
+    protected MockAnyRestApiBaseResponseModel<MockAnyRestApiGetResponseModel> createResponseModel() {
+        return new MockAnyRestApiBaseResponseModel<>();
     }
 
     @Override
-    protected boolean validate(BaseMockAnyRestApiRequestModel<MockAnyRestApiGetRequestModel> request,
-                               BaseMockAnyRestApiResponseModel<MockAnyRestApiGetResponseModel> response) {
+    protected boolean validate(MockAnyRestApiBaseRequestModel<MockAnyRestApiGetRequestModel> request,
+                               MockAnyRestApiBaseResponseModel<MockAnyRestApiGetResponseModel> response) {
         return true;
     }
 
     @Override
-    protected void execute(BaseMockAnyRestApiRequestModel<MockAnyRestApiGetRequestModel> request,
-                           BaseMockAnyRestApiResponseModel<MockAnyRestApiGetResponseModel> response) {
+    protected void execute(MockAnyRestApiBaseRequestModel<MockAnyRestApiGetRequestModel> request,
+                           MockAnyRestApiBaseResponseModel<MockAnyRestApiGetResponseModel> response) {
         try {
-            BaseMockAnyRestApiResponseModel<MockAnyRestApiGetResponseModel> mockResponse = new ObjectMapper().readValue(
+            MockAnyRestApiBaseResponseModel<MockAnyRestApiGetResponseModel> mockResponse = new ObjectMapper().readValue(
                     new ClassPathResource("mock-response.json").getFile(),
-                    new TypeReference<BaseMockAnyRestApiResponseModel<MockAnyRestApiGetResponseModel>>() {
+                    new TypeReference<MockAnyRestApiBaseResponseModel<MockAnyRestApiGetResponseModel>>() {
                     });
 
             BeanUtils.copyProperties(mockResponse, response);

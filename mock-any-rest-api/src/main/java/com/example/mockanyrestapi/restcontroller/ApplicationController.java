@@ -1,9 +1,9 @@
 package com.example.mockanyrestapi.restcontroller;
 
-import com.example.anyrestapicore.model.mockanyrestapi.request.BaseMockAnyRestApiRequestModel;
-import com.example.anyrestapicore.model.mockanyrestapi.request.payload.MockAnyRestApiGetRequestModel;
-import com.example.anyrestapicore.model.mockanyrestapi.response.BaseMockAnyRestApiResponseModel;
-import com.example.anyrestapicore.model.mockanyrestapi.response.payload.MockAnyRestApiGetResponseModel;
+import com.example.anyrestapicore.bean.mockanyrestapi.request.MockAnyRestApiBaseRequestModel;
+import com.example.anyrestapicore.bean.mockanyrestapi.request.payload.MockAnyRestApiGetRequestModel;
+import com.example.anyrestapicore.bean.mockanyrestapi.response.MockAnyRestApiBaseResponseModel;
+import com.example.anyrestapicore.bean.mockanyrestapi.response.payload.MockAnyRestApiGetResponseModel;
 import com.example.mockanyrestapi.service.impl.MockAnyRestApiGetService;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -19,8 +19,8 @@ public class ApplicationController {
     }
 
     @PostMapping("getAny")
-    public BaseMockAnyRestApiResponseModel<MockAnyRestApiGetResponseModel> getAny(
-            @RequestBody BaseMockAnyRestApiRequestModel<MockAnyRestApiGetRequestModel> request) {
+    public MockAnyRestApiBaseResponseModel<MockAnyRestApiGetResponseModel> getAny(
+            @RequestBody MockAnyRestApiBaseRequestModel<MockAnyRestApiGetRequestModel> request) {
 
         return this.anyGetService.process(request);
     }
