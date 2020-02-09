@@ -1,9 +1,11 @@
 package com.example.anyrestapi.configuration;
 
 import com.example.anyrestapicore.configuration.ReloadablePropertySourceFactory;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.annotation.PropertySources;
+import org.springframework.web.client.RestTemplate;
 
 @Configuration
 @PropertySources({
@@ -12,4 +14,9 @@ import org.springframework.context.annotation.PropertySources;
         @PropertySource(value = "classpath:error.properties", factory = ReloadablePropertySourceFactory.class)
 })
 public class ApplicationConfiguration {
+
+    @Bean
+    RestTemplate restTemplate() {
+        return new RestTemplate();
+    }
 }
