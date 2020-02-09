@@ -1,0 +1,28 @@
+{
+  "statusCode": "STATUS-000-0000",
+  "message": "正常終了",
+  "payload": [
+    {
+      "id": "ID-000-0000",
+      "name": "NAME-000-0000",
+      "type": "TYPE-000-0000"
+    },
+    {
+      "id": "ID-111-1111",
+      "name": "NAME-111-1111",
+      "type": "TYPE-111-1111"
+    }
+  ],
+  "errors": [
+    {
+      "code": "ERROR-000-0000",
+      "bindId": "BIND-ID-000-0000",
+      "message": "正常終了"
+    },
+    {
+      "code": "ERROR-111-1111",
+      "bindId": "BIND-ID-111-1111",
+      "message": "正常終了"
+    }
+  ]
+}
