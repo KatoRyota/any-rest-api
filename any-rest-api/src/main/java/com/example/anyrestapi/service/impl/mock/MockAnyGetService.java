@@ -31,7 +31,7 @@ public class MockAnyGetService extends BaseService<
 
     @Override
     protected BaseResponseBean<List<AnyCalcOrGetResponseBean>> createResponse() {
-        return null;
+        return new BaseResponseBean<>();
     }
 
     @Override

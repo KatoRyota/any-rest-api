@@ -31,7 +31,7 @@ public class MockAnyRestApiUpdateService extends BaseMockAnyRestApiService<
 
     @Override
     protected MockAnyRestApiBaseResponseBean<MockAnyRestApiUpdateResponseBean> createResponseModel() {
-        return null;
+        return new MockAnyRestApiBaseResponseBean<>();
     }
 
     @Override

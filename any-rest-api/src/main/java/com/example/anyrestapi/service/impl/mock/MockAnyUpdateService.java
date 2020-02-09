@@ -33,7 +33,7 @@ public class MockAnyUpdateService extends BaseService<
 
     @Override
     protected BaseResponseBean<AnyUpdateResponseBean> createResponse() {
-        return null;
+        return new BaseResponseBean<>();
     }
 
     @Override

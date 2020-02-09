@@ -26,7 +26,7 @@ services:
   any-rest-api:
     build:
       context: ..
-      dockerfile: ./any-rest-api/Dockerfile
+      dockerfile: ./docker/any-rest-api/Dockerfile
     image: any-rest-api
     container_name: any-rest-api
     hostname: any-rest-api
@@ -43,7 +43,7 @@ services:
   mock-any-rest-api:
     build:
       context: ..
-      dockerfile: ./mock-any-rest-api/Dockerfile
+      dockerfile: ./docker/mock-any-rest-api/Dockerfile
     image: mock-any-rest-api
     container_name: mock-any-rest-api
     hostname: mock-any-rest-api
