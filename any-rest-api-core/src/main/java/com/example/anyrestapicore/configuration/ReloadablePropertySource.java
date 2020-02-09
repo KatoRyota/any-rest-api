@@ -7,15 +7,17 @@ import org.springframework.util.StringUtils;
 
 public class ReloadablePropertySource extends PropertySource {
 
-    private final PropertiesConfiguration propertiesConfiguration;
+    private final PropertiesConfiguration configuration;
 
     public ReloadablePropertySource(String name, String path) {
 
         super(StringUtils.isEmpty(name) ? path : name);
 
         try {
-            this.propertiesConfiguration = new PropertiesConfiguration(path);
-            this.propertiesConfiguration.setReloadingStrategy(new FileChangedReloadingStrategy());
+            this.configuration = new PropertiesConfiguration(path);
+            this.configuration.setReloadingStrategy(new FileChangedReloadingStrategy());
+            this.configuration.setEncoding("UTF-8");
+            this.configuration.refresh();
 
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -24,6 +26,6 @@ public class ReloadablePropertySource extends PropertySource {
 
     @Override
     public Object getProperty(String s) {
-        return propertiesConfiguration.getProperty(s);
+        return configuration.getProperty(s);
     }
 }
