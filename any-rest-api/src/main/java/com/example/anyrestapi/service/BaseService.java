@@ -38,7 +38,7 @@ public abstract class BaseService<
             }
 
             List<AnyDataModel> anyDataModels = createIntermediateObject(request);
-            restLogger.info("anyDataModels->[{}]", new ObjectMapper().writeValueAsString(anyDataModels));
+            logger.info("anyDataModels->[{}]", new ObjectMapper().writeValueAsString(anyDataModels));
 
             execute(request, response, anyDataModels);
 
