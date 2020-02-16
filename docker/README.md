@@ -7,14 +7,14 @@
 ```shell script
 docker-machine create \
     -d virtualbox \
-    --virtualbox-disk-size 40000 \
-    --virtualbox-memory 4096 \
+    --virtualbox-disk-size 51200 \
+    --virtualbox-memory 5120 \
     --virtualbox-cpu-count 2 \
     machine-1
     
 docker-machine regenerate-certs machine-1
 docker-machine upgrade machine-1
-eval `docker-machine env machine-1`
+eval $(docker-machine env --shell bash machine-1)
 ```
 
 ## "Oracle Database 12c Release 2"のバイナリファイルをダウンロード。
@@ -44,7 +44,7 @@ curl -s -X POST \
     -H "Content-Type: application/json" \
     -d '
         {
-            "userName":"KatoRytoa",
+            "userName":"admin",
             "authKey":"admin",
             "payload":[
                 {
@@ -56,6 +56,16 @@ curl -s -X POST \
         }
     ' \
     http://192.168.99.100:50000/mockCalcAny
+```
+```shell script
+docker-machine ssh machine-1
+docker exec -it oracle-db bash
+
+sqlplus -s 'test/test@//localhost:1521/admin' <<EOF
+    SELECT name FROM people;
+EOF
+exit
+exit
 ```
 
 ## Docker コンテナの停止
@@ -70,37 +80,30 @@ cd 'C:\Users\kator\repo\any-rest-api\docker'
 docker-compose down
 docker system prune -a --volumes
 rm -vrf 'C:\Users\kator\repo\any-rest-api\docker\oracle-db\oradata'
-docker-machine restart machine-1
-eval `docker-machine env machine-1`
 docker-compose up --build
 ```
   
 ## 不要なリソースを削除したい
---- 仮想マシンの削除 ---
+/--- 仮想マシンの削除 ---/
 ```shell script
 docker-machine rm machine-1
 ```
---- コンテナ／ネットワーク／イメージ／ボリューム の一括削除 ---
+/--- コンテナ／ネットワーク／イメージ／ボリューム の一括削除 ---/
 ```shell script
 docker stop `docker ps -q`
 docker system prune -a --volumes
 ```
---- コンテナの削除 ---
-```shell script
-docker container prune
-```
---- ネットワークの削除 ---
-```shell script
-docker network prune
-```
---- ボリュームの削除 ---
-```shell script
-docker volume prune
-```
-  
+
 ## 仮想マシンを起動したい
 ```shell script
 docker-machine start machine-1
+eval $(docker-machine env --shell bash machine-1)
+```
+
+## 仮想マシンを再起動したい
+```shell script
+docker-machine restart machine-1
+eval $(docker-machine env --shell bash machine-1)
 ```
 
 ## 仮想マシンを停止したい
@@ -127,9 +130,25 @@ docker exec -it oracle-db bash
 ```
   
 ## sqlplus で Oracle DB に接続したい
+```shell script
+sqlplus -s 'test/test@//localhost:1521/admin' <<EOF
+SELECT name FROM people;
+EOF
+```
+```shell script
+sqlplus / as sysdba
+```
+```shell script
+sqlplus 'system/!EZe8Ngz@//localhost:1521/admin'
+```
+```shell script
+sqlplus 'pdbadmin/!EZe8Ngz@//localhost:1521/admin'
+```
+
+## Oracle Enterprise Manager Express にアクセスしたい
 ```text
-ユーザー:
-    - system
-    - PDBADMIN
-パスワード: oracle
+The Oracle Database inside the container also has Oracle Enterprise Manager Express configured. 
+To access OEM Express, start your browser and follow the URL:
+
+	https://192.168.99.100:5500/em/
 ```
