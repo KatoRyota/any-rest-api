@@ -44,24 +44,18 @@ curl -s -X POST \
     -H "Content-Type: application/json" \
     -d '
         {
-            "userName":"admin",
-            "authKey":"admin",
-            "payload":[
-                {
-                    "id":"ID-000-000",
-                    "name":"NAME-000-0000",
-                    "type":"TYPE-000-0000"
-                }
-            ]
+            "userName":"test",
+            "authKey":"test",
+            "payload":["id-000-0000","id-111-1111"]
         }
     ' \
-    http://192.168.99.100:50000/mockCalcAny
+    http://192.168.99.100:50000/getAny
 ```
 ```shell script
 docker-machine ssh machine-1
 docker exec -it oracle-db bash
 
-sqlplus -s 'test/test@//localhost:1521/admin' <<EOF
+sqlplus -s 'test/test@//localhost:1521/testPdb' <<EOF
     SELECT name FROM people;
 EOF
 exit
@@ -131,18 +125,21 @@ docker exec -it oracle-db bash
   
 ## sqlplus で Oracle DB に接続したい
 ```shell script
-sqlplus -s 'test/test@//localhost:1521/admin' <<EOF
-SELECT name FROM people;
+sqlplus -s 'test/test@//localhost:1521/testPdb' <<EOF
+SELECT name FROM any_artifact;
 EOF
 ```
 ```shell script
 sqlplus / as sysdba
 ```
 ```shell script
-sqlplus 'system/!EZe8Ngz@//localhost:1521/admin'
+sqlplus 'sys/!EZe8Ngz@//localhost:1521/testSid' as sysdba
 ```
 ```shell script
-sqlplus 'pdbadmin/!EZe8Ngz@//localhost:1521/admin'
+sqlplus 'system/!EZe8Ngz@//localhost:1521/testSid'
+```
+```shell script
+sqlplus 'pdbadmin/!EZe8Ngz@//localhost:1521/testPdb'
 ```
 
 ## Oracle Enterprise Manager Express にアクセスしたい

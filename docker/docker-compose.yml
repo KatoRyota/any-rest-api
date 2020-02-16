@@ -16,8 +16,8 @@ services:
       - "1521:1521"
       - "5500:5500"
     environment:
-      - ORACLE_SID=admin
-      - ORACLE_PDB=admin
+      - ORACLE_SID=testSid
+      - ORACLE_PDB=testPdb
       - ORACLE_PWD=!EZe8Ngz
       - ORACLE_CHARACTERSET=AL32UTF8
       - TZ=Asia/Tokyo

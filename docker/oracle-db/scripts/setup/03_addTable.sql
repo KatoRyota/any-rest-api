@@ -1,4 +1,4 @@
-CONNECT test/test@//localhost:1521/admin;
+CONNECT test/test@//localhost:1521/testPdb;
 
 CREATE TABLE any_artifact (
     id VARCHAR2(20),
