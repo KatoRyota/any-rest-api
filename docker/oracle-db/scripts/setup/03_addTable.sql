@@ -7,9 +7,9 @@ CREATE TABLE any_artifact (
 );
 
 INSERT INTO any_artifact (id, name, type)
-    VALUES ('id-000-0000', 'name-000-0000', 'type-000-0000');
+    VALUES ('ID-000-0000', 'NAME-000-0000', 'TYPE-000-0000');
 INSERT INTO any_artifact (id, name, type)
-    VALUES ('id-111-1111', 'name-111-1111', 'type-111-1111');
+    VALUES ('ID-111-1111', 'NAME-111-1111', 'TYPE-111-1111');
 
 COMMIT;
 exit;

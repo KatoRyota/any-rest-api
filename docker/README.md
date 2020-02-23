@@ -46,7 +46,7 @@ curl -s -X POST \
         {
             "userName":"test",
             "authKey":"test",
-            "payload":["id-000-0000","id-111-1111"]
+            "payload":["ID-000-0000","ID-111-1111"]
         }
     ' \
     http://192.168.99.100:50000/getAny
@@ -56,7 +56,7 @@ docker-machine ssh machine-1
 docker exec -it oracle-db bash
 
 sqlplus -s 'test/test@//localhost:1521/testPdb' <<EOF
-    SELECT name FROM people;
+    SELECT * FROM any_artifact;
 EOF
 exit
 exit
@@ -125,11 +125,6 @@ docker exec -it oracle-db bash
   
 ## sqlplus で Oracle DB に接続したい
 ```shell script
-sqlplus -s 'test/test@//localhost:1521/testPdb' <<EOF
-SELECT id FROM any_artifact where id in ('id-000-0000');
-EOF
-```
-```shell script
 sqlplus / as sysdba
 ```
 ```shell script
@@ -140,6 +135,9 @@ sqlplus 'system/!EZe8Ngz@//localhost:1521/testSid'
 ```
 ```shell script
 sqlplus 'pdbadmin/!EZe8Ngz@//localhost:1521/testPdb'
+```
+```shell script
+sqlplus -s 'test/test@//localhost:1521/testPdb'
 ```
 
 ## Oracle Enterprise Manager Express にアクセスしたい

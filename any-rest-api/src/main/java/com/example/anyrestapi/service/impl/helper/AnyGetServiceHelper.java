@@ -16,15 +16,15 @@ import java.util.List;
 @Component
 public class AnyGetServiceHelper {
 
-    public ResponseEntity<MockAnyRestApiBaseResponseBean<List<MockAnyRestApiGetResponseBean>>> getAnyOfMockAnyRestApi(RestTemplate restTemplate,
-                                                                                                                      String url,
-                                                                                                                      List<AnyDataModel> anyDataModelList) {
+    public ResponseEntity<MockAnyRestApiBaseResponseBean<List<MockAnyRestApiGetResponseBean>>> getAnyFromMockAnyRestApi(RestTemplate restTemplate,
+                                                                                                                        String url,
+                                                                                                                        List<AnyDataModel> anyDataModelList) {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
 
         MockAnyRestApiBaseRequestBean<List<MockAnyRestApiGetRequestBean>> mockAnyRestApiRequest = new MockAnyRestApiBaseRequestBean<>();
-        mockAnyRestApiRequest.setUserName("userName-000-0000");
-        mockAnyRestApiRequest.setAuthKey("authKey-000-0000");
+        mockAnyRestApiRequest.setUserName("USERNAME-000-0000");
+        mockAnyRestApiRequest.setAuthKey("AUTHKEY-000-0000");
 
         List<MockAnyRestApiGetRequestBean> mockAnyRestApiRequestPayload = new ArrayList<>();
 

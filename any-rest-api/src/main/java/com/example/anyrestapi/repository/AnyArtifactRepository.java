@@ -18,6 +18,7 @@ public class AnyArtifactRepository {
     }
 
     public List<AnyArtifactRecordBean> select(List<String> idList) {
+
         String sql = "" +
                 "select id, name, type " +
                 "from any_artifact " +

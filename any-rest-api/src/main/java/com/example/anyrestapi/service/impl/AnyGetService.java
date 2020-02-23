@@ -12,6 +12,7 @@ import com.example.anyrestapicore.bean.response.errors.ErrorBean;
 import com.example.anyrestapicore.bean.response.payload.AnyCalcOrGetResponseBean;
 import com.example.anyrestapicore.model.common.AnyDataModel;
 import com.example.anyrestapicore.model.common.partial.AnyPartialDataModel;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.env.Environment;
@@ -59,36 +60,49 @@ public class AnyGetService extends BaseService<
     @Override
     protected List<AnyDataModel> createIntermediateObject(BaseRequestBean<List<String>> request) {
 
-        List<AnyArtifactRecordBean> anyArtifactRecordList = anyArtifactRepository.select(request.getPayload());
         List<AnyDataModel> anyDataModelList = new ArrayList<>();
 
-        for (AnyArtifactRecordBean anyArtifactRecord : anyArtifactRecordList) {
-            AnyDataModel anyDataModel = new AnyDataModel();
-            anyDataModel.id = anyArtifactRecord.getId();
-            anyDataModel.type = anyArtifactRecord.getType();
-            anyDataModel.name = anyArtifactRecord.getName();
-            anyDataModelList.add(anyDataModel);
-        }
+        try {
+            List<AnyArtifactRecordBean> anyArtifactRecordList = anyArtifactRepository.select(request.getPayload());
 
-        String url = Objects.requireNonNull(env.getProperty("mockanyrestapi.url.getany"));
-        ResponseEntity<MockAnyRestApiBaseResponseBean<List<MockAnyRestApiGetResponseBean>>> mockAnyRestApiResponse = helper.getAnyOfMockAnyRestApi(restTemplate, url, anyDataModelList);
-        MockAnyRestApiBaseResponseBean<List<MockAnyRestApiGetResponseBean>> mockAnyRestApiResponseBody = Objects.requireNonNull(mockAnyRestApiResponse.getBody());
-        List<MockAnyRestApiGetResponseBean> mockAnyRestApiResponsePayload = mockAnyRestApiResponseBody.getPayload();
-
-        for (AnyDataModel anyDataModel : anyDataModelList) {
-            List<AnyPartialDataModel> anyPartialDataModelList = new ArrayList<>();
-
-            for (MockAnyRestApiGetResponseBean mockAnyRestApiResponseData : mockAnyRestApiResponsePayload) {
-                if (anyDataModel.id.equals(mockAnyRestApiResponseData.getId())) {
-                    AnyPartialDataModel anyPartialDataModel = new AnyPartialDataModel();
-                    anyPartialDataModel.id = mockAnyRestApiResponseData.getId();
-                    anyPartialDataModel.name = mockAnyRestApiResponseData.getName();
-                    anyPartialDataModel.type = mockAnyRestApiResponseData.getType();
-                    anyPartialDataModelList.add(anyPartialDataModel);
-                }
+            if (logger.isDebugEnabled()) {
+                logger.debug("DB Result Set->[{}]", new ObjectMapper().writeValueAsString(anyArtifactRecordList));
             }
 
-            anyDataModel.anyPartialDataModels = anyPartialDataModelList;
+            for (AnyArtifactRecordBean anyArtifactRecord : anyArtifactRecordList) {
+                AnyDataModel anyDataModel = new AnyDataModel();
+                anyDataModel.id = anyArtifactRecord.getId();
+                anyDataModel.type = anyArtifactRecord.getType();
+                anyDataModel.name = anyArtifactRecord.getName();
+                anyDataModelList.add(anyDataModel);
+            }
+
+            String url = Objects.requireNonNull(env.getProperty("mockanyrestapi.url.getany"));
+            ResponseEntity<MockAnyRestApiBaseResponseBean<List<MockAnyRestApiGetResponseBean>>> mockAnyRestApiResponse = helper.getAnyFromMockAnyRestApi(restTemplate, url, anyDataModelList);
+            MockAnyRestApiBaseResponseBean<List<MockAnyRestApiGetResponseBean>> mockAnyRestApiResponseBody = Objects.requireNonNull(mockAnyRestApiResponse.getBody());
+            List<MockAnyRestApiGetResponseBean> mockAnyRestApiResponsePayload = mockAnyRestApiResponseBody.getPayload();
+
+            if (logger.isDebugEnabled()) {
+                logger.debug("mock-any-rest-api Response->[{}]", new ObjectMapper().writeValueAsString(mockAnyRestApiResponseBody));
+            }
+
+            for (AnyDataModel anyDataModel : anyDataModelList) {
+                List<AnyPartialDataModel> anyPartialDataModelList = new ArrayList<>();
+
+                for (MockAnyRestApiGetResponseBean mockAnyRestApiResponseData : mockAnyRestApiResponsePayload) {
+                    if (anyDataModel.id.equals(mockAnyRestApiResponseData.getId())) {
+                        AnyPartialDataModel anyPartialDataModel = new AnyPartialDataModel();
+                        anyPartialDataModel.id = mockAnyRestApiResponseData.getId();
+                        anyPartialDataModel.name = mockAnyRestApiResponseData.getName();
+                        anyPartialDataModel.type = mockAnyRestApiResponseData.getType();
+                        anyPartialDataModelList.add(anyPartialDataModel);
+                    }
+                }
+
+                anyDataModel.anyPartialDataModels = anyPartialDataModelList;
+            }
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
 
         return anyDataModelList;
@@ -99,8 +113,8 @@ public class AnyGetService extends BaseService<
                            BaseResponseBean<List<AnyCalcOrGetResponseBean>> response,
                            List<AnyDataModel> anyDataModels) {
 
-        response.setStatusCode("statusCode-000-0000");
-        response.setMessage("message-000-0000");
+        response.setStatusCode("STATUS-000-0000");
+        response.setMessage("正常終了");
 
         List<AnyCalcOrGetResponseBean> anyCalcOrGetResponseList = new ArrayList<>();
 
@@ -123,9 +137,9 @@ public class AnyGetService extends BaseService<
 
         List<ErrorBean> errors = new ArrayList<>();
         ErrorBean error = new ErrorBean();
-        error.setBindId("bindId-000-0000");
-        error.setCode("code-000-0000");
-        error.setMessage("message-000-0000");
+        error.setCode("ERROR-000-0000");
+        error.setBindId("ID-000-0000");
+        error.setMessage("エラーが発生しました。");
         errors.add(error);
         response.setErrors(errors);
     }

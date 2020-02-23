@@ -62,13 +62,13 @@ public class AnyCalcService extends BaseService<
         headers.setContentType(MediaType.APPLICATION_JSON);
 
         MockAnyRestApiBaseRequestBean<List<MockAnyRestApiGetRequestBean>> mockAnyRestApiRequest = new MockAnyRestApiBaseRequestBean<>();
-        mockAnyRestApiRequest.setUserName("userName-000-0000");
-        mockAnyRestApiRequest.setAuthKey("authKey-000-0000");
+        mockAnyRestApiRequest.setUserName("USERNAME-000-0000");
+        mockAnyRestApiRequest.setAuthKey("AUTHKEY-000-0000");
         List<MockAnyRestApiGetRequestBean> mockAnyRestApiRequestPayload = new ArrayList<>();
         MockAnyRestApiGetRequestBean mockAnyRestApiRequestData = new MockAnyRestApiGetRequestBean();
-        mockAnyRestApiRequestData.setId("id-000-0000");
-        mockAnyRestApiRequestData.setName("name-000-0000");
-        mockAnyRestApiRequestData.setType("type-000-0000");
+        mockAnyRestApiRequestData.setId("ID-000-0000");
+        mockAnyRestApiRequestData.setName("NAME-000-0000");
+        mockAnyRestApiRequestData.setType("TYPE-000-0000");
         mockAnyRestApiRequestPayload.add(mockAnyRestApiRequestData);
         mockAnyRestApiRequest.setPayload(mockAnyRestApiRequestPayload);
 
@@ -99,8 +99,8 @@ public class AnyCalcService extends BaseService<
 
         AnyDataModel anyDataModel = anyDataModels.get(0);
 
-        response.setStatusCode("statusCode-000-0000");
-        response.setMessage("message-000-0000");
+        response.setStatusCode("STATUS-000-0000");
+        response.setMessage("正常終了");
 
         List<AnyCalcOrGetResponseBean> anyCalcOrGetResponseBeanList = new ArrayList<>();
         AnyCalcOrGetResponseBean anyCalcOrGetResponseBean = new AnyCalcOrGetResponseBean();
@@ -112,9 +112,9 @@ public class AnyCalcService extends BaseService<
 
         List<ErrorBean> errors = new ArrayList<>();
         ErrorBean error = new ErrorBean();
-        error.setBindId("bindId-000-0000");
-        error.setCode("code-000-0000");
-        error.setMessage("message-000-0000");
+        error.setCode("ERROR-000-0000");
+        error.setBindId("ID-000-0000");
+        error.setMessage("エラーが発生しました。");
         errors.add(error);
         response.setErrors(errors);
     }
