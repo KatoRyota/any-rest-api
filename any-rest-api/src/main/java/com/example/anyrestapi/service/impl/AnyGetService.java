@@ -1,10 +1,9 @@
 package com.example.anyrestapi.service.impl;
 
+import com.example.anyrestapi.repository.AnyArtifactRepository;
 import com.example.anyrestapi.service.BaseService;
 import com.example.anyrestapi.service.impl.helper.AnyGetServiceHelper;
 import com.example.anyrestapicore.bean.database.AnyArtifactRecordBean;
-import com.example.anyrestapicore.bean.mockanyrestapi.request.MockAnyRestApiBaseRequestBean;
-import com.example.anyrestapicore.bean.mockanyrestapi.request.payload.MockAnyRestApiGetRequestBean;
 import com.example.anyrestapicore.bean.mockanyrestapi.response.MockAnyRestApiBaseResponseBean;
 import com.example.anyrestapicore.bean.mockanyrestapi.response.payload.MockAnyRestApiGetResponseBean;
 import com.example.anyrestapicore.bean.request.BaseRequestBean;
@@ -15,12 +14,8 @@ import com.example.anyrestapicore.model.common.AnyDataModel;
 import com.example.anyrestapicore.model.common.partial.AnyPartialDataModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.core.env.Environment;
-import org.springframework.http.*;
-import org.springframework.jdbc.core.BeanPropertyRowMapper;
-import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
-import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -36,17 +31,17 @@ public class AnyGetService extends BaseService<
     private static final Logger logger = LoggerFactory.getLogger(AnyGetService.class);
     private final Environment env;
     private final AnyGetServiceHelper helper;
-    private final NamedParameterJdbcTemplate jdbcTemplate;
+    private final AnyArtifactRepository anyArtifactRepository;
     private final RestTemplate restTemplate;
 
     public AnyGetService(Environment env,
                          AnyGetServiceHelper helper,
-                         NamedParameterJdbcTemplate jdbcTemplate,
+                         AnyArtifactRepository anyArtifactRepository,
                          RestTemplate restTemplate) {
         super();
         this.env = env;
         this.helper = helper;
-        this.jdbcTemplate = jdbcTemplate;
+        this.anyArtifactRepository = anyArtifactRepository;
         this.restTemplate = restTemplate;
     }
 
@@ -64,18 +59,7 @@ public class AnyGetService extends BaseService<
     @Override
     protected List<AnyDataModel> createIntermediateObject(BaseRequestBean<List<String>> request) {
 
-        String sql = "" +
-                "select id, name, type " +
-                "from any_artifact " +
-                "where id in (:idList)";
-
-        List<AnyArtifactRecordBean> anyArtifactRecordList = jdbcTemplate.query(
-                sql,
-                new MapSqlParameterSource()
-                        .addValue(
-                                "idList", String.join(",", request.getPayload())),
-                new BeanPropertyRowMapper<>(AnyArtifactRecordBean.class));
-
+        List<AnyArtifactRecordBean> anyArtifactRecordList = anyArtifactRepository.select(request.getPayload());
         List<AnyDataModel> anyDataModelList = new ArrayList<>();
 
         for (AnyArtifactRecordBean anyArtifactRecord : anyArtifactRecordList) {
@@ -87,30 +71,7 @@ public class AnyGetService extends BaseService<
         }
 
         String url = Objects.requireNonNull(env.getProperty("mockanyrestapi.url.getany"));
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
-
-        MockAnyRestApiBaseRequestBean<List<MockAnyRestApiGetRequestBean>> mockAnyRestApiRequest = new MockAnyRestApiBaseRequestBean<>();
-        mockAnyRestApiRequest.setUserName("userName-000-0000");
-        mockAnyRestApiRequest.setAuthKey("authKey-000-0000");
-
-        List<MockAnyRestApiGetRequestBean> mockAnyRestApiRequestPayload = new ArrayList<>();
-
-        for (AnyDataModel anyDataModel : anyDataModelList) {
-            MockAnyRestApiGetRequestBean mockAnyRestApiRequestData = new MockAnyRestApiGetRequestBean();
-            mockAnyRestApiRequestData.setId(anyDataModel.id);
-            mockAnyRestApiRequestPayload.add(mockAnyRestApiRequestData);
-        }
-
-        mockAnyRestApiRequest.setPayload(mockAnyRestApiRequestPayload);
-
-        ResponseEntity<MockAnyRestApiBaseResponseBean<List<MockAnyRestApiGetResponseBean>>> mockAnyRestApiResponse = restTemplate.exchange(
-                url,
-                HttpMethod.POST,
-                new HttpEntity<>(mockAnyRestApiRequest, headers),
-                new ParameterizedTypeReference<>() {
-                });
-
+        ResponseEntity<MockAnyRestApiBaseResponseBean<List<MockAnyRestApiGetResponseBean>>> mockAnyRestApiResponse = helper.getAnyOfMockAnyRestApi(restTemplate, url, anyDataModelList);
         MockAnyRestApiBaseResponseBean<List<MockAnyRestApiGetResponseBean>> mockAnyRestApiResponseBody = Objects.requireNonNull(mockAnyRestApiResponse.getBody());
         List<MockAnyRestApiGetResponseBean> mockAnyRestApiResponsePayload = mockAnyRestApiResponseBody.getPayload();
 
@@ -120,9 +81,9 @@ public class AnyGetService extends BaseService<
             for (MockAnyRestApiGetResponseBean mockAnyRestApiResponseData : mockAnyRestApiResponsePayload) {
                 if (anyDataModel.id.equals(mockAnyRestApiResponseData.getId())) {
                     AnyPartialDataModel anyPartialDataModel = new AnyPartialDataModel();
-                    anyPartialDataModel.partialId = mockAnyRestApiResponseData.getId();
-                    anyPartialDataModel.partialName = mockAnyRestApiResponseData.getName();
-                    anyPartialDataModel.partialType = mockAnyRestApiResponseData.getType();
+                    anyPartialDataModel.id = mockAnyRestApiResponseData.getId();
+                    anyPartialDataModel.name = mockAnyRestApiResponseData.getName();
+                    anyPartialDataModel.type = mockAnyRestApiResponseData.getType();
                     anyPartialDataModelList.add(anyPartialDataModel);
                 }
             }
@@ -150,9 +111,9 @@ public class AnyGetService extends BaseService<
             anyCalcOrGetResponse.setType(anyDataModel.type);
 
             for (AnyPartialDataModel anyPartialDataModel : anyDataModel.anyPartialDataModels) {
-                anyCalcOrGetResponse.setPartialId(anyPartialDataModel.partialId);
-                anyCalcOrGetResponse.setPartialName(anyPartialDataModel.partialName);
-                anyCalcOrGetResponse.setPartialType(anyPartialDataModel.partialType);
+                anyCalcOrGetResponse.setPartialId(anyPartialDataModel.id);
+                anyCalcOrGetResponse.setPartialName(anyPartialDataModel.name);
+                anyCalcOrGetResponse.setPartialType(anyPartialDataModel.type);
             }
 
             anyCalcOrGetResponseList.add(anyCalcOrGetResponse);

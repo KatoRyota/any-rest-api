@@ -67,9 +67,8 @@
         <asynchronousSending>false</asynchronousSending>
     </appender>
 
-    <logger name="com.example.anyrestapi" level="DEBUG" additivity="false">
-        <appender-ref ref="FILE_APPLICATION"/>
-    </logger>
+    <logger name="org.springframework.jdbc.core" level="TRACE"/>
+    <logger name="com.example.anyrestapi" level="DEBUG"/>
 
     <logger name="rest" level="INFO" additivity="false">
         <appender-ref ref="FILE_REST"/>

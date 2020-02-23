@@ -37,6 +37,8 @@ services:
       - mock-any-rest-api:mock-any-rest-api
     ports:
       - "50000:8080"
+    environment:
+      - TZ=Asia/Tokyo
     depends_on:
       - oracle-db
       - mock-any-rest-api
@@ -53,3 +55,5 @@ services:
       - ./mock-any-rest-api/logs:/app/logs
     ports:
       - "50001:8080"
+    environment:
+      - TZ=Asia/Tokyo

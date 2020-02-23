@@ -16,13 +16,13 @@
   "errors": [
     {
       "code": "ERROR-000-0000",
-      "bindId": "BIND-ID-000-0000",
-      "message": "正常終了"
+      "bindId": "ID-000-0000",
+      "message": "エラーが発生しました。"
     },
     {
       "code": "ERROR-111-1111",
-      "bindId": "BIND-ID-111-1111",
-      "message": "正常終了"
+      "bindId": "ID-111-1111",
+      "message": "エラーが発生しました。"
     }
   ]
 }

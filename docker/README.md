@@ -126,7 +126,7 @@ docker exec -it oracle-db bash
 ## sqlplus で Oracle DB に接続したい
 ```shell script
 sqlplus -s 'test/test@//localhost:1521/testPdb' <<EOF
-SELECT name FROM any_artifact;
+SELECT id FROM any_artifact where id in ('id-000-0000');
 EOF
 ```
 ```shell script
