@@ -15,10 +15,8 @@ import com.example.anyrestapicore.model.common.partial.AnyPartialDataModel;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.core.env.Environment;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,20 +28,16 @@ public class AnyGetService extends BaseService<
         BaseResponseBean<List<AnyCalcOrGetResponseBean>>> {
 
     private static final Logger logger = LoggerFactory.getLogger(AnyGetService.class);
-    private final Environment env;
     private final AnyGetServiceHelper helper;
     private final AnyArtifactRepository anyArtifactRepository;
-    private final RestTemplate restTemplate;
 
-    public AnyGetService(Environment env,
-                         AnyGetServiceHelper helper,
-                         AnyArtifactRepository anyArtifactRepository,
-                         RestTemplate restTemplate) {
+    public AnyGetService(
+            AnyGetServiceHelper helper,
+            AnyArtifactRepository anyArtifactRepository) {
+
         super();
-        this.env = env;
         this.helper = helper;
         this.anyArtifactRepository = anyArtifactRepository;
-        this.restTemplate = restTemplate;
     }
 
     @Override
@@ -52,39 +46,55 @@ public class AnyGetService extends BaseService<
     }
 
     @Override
-    protected boolean validate(BaseRequestBean<List<String>> request,
-                               BaseResponseBean<List<AnyCalcOrGetResponseBean>> response) {
+    protected boolean validate(
+            BaseRequestBean<List<String>> request,
+            BaseResponseBean<List<AnyCalcOrGetResponseBean>> response) {
+
         return true;
     }
 
     @Override
-    protected List<AnyDataModel> createIntermediateObject(BaseRequestBean<List<String>> request) {
+    protected List<AnyDataModel> createIntermediateObject(
+            BaseRequestBean<List<String>> request) {
 
         List<AnyDataModel> anyDataModelList = new ArrayList<>();
 
         try {
-            List<AnyArtifactRecordBean> anyArtifactRecordList = anyArtifactRepository.select(request.getPayload());
+            List<AnyArtifactRecordBean> anyArtifactRecordList =
+                    anyArtifactRepository.selectUsingIdList(
+                            request.getPayload());
 
             if (logger.isDebugEnabled()) {
-                logger.debug("DB Result Set->[{}]", new ObjectMapper().writeValueAsString(anyArtifactRecordList));
+                logger.debug("DB Result Set->[{}]",
+                        new ObjectMapper().writeValueAsString(
+                                anyArtifactRecordList));
             }
 
             for (AnyArtifactRecordBean anyArtifactRecord : anyArtifactRecordList) {
                 AnyDataModel anyDataModel = new AnyDataModel();
                 anyDataModel.id = anyArtifactRecord.getId();
-                anyDataModel.type = anyArtifactRecord.getType();
                 anyDataModel.name = anyArtifactRecord.getName();
+                anyDataModel.type = anyArtifactRecord.getType();
                 anyDataModelList.add(anyDataModel);
             }
 
-            String url = Objects.requireNonNull(env.getProperty("mockanyrestapi.url.getany"));
-            ResponseEntity<MockAnyRestApiBaseResponseBean<List<MockAnyRestApiGetResponseBean>>> mockAnyRestApiResponse = helper.getAnyFromMockAnyRestApi(restTemplate, url, anyDataModelList);
-            MockAnyRestApiBaseResponseBean<List<MockAnyRestApiGetResponseBean>> mockAnyRestApiResponseBody = Objects.requireNonNull(mockAnyRestApiResponse.getBody());
-            List<MockAnyRestApiGetResponseBean> mockAnyRestApiResponsePayload = mockAnyRestApiResponseBody.getPayload();
+            ResponseEntity<MockAnyRestApiBaseResponseBean<List<MockAnyRestApiGetResponseBean>>> mockAnyRestApiResponse =
+                    helper.getAnyOfMockAnyRestApi(
+                            anyDataModelList);
+
+            MockAnyRestApiBaseResponseBean<List<MockAnyRestApiGetResponseBean>> mockAnyRestApiResponseBody =
+                    Objects.requireNonNull(
+                            mockAnyRestApiResponse.getBody());
 
             if (logger.isDebugEnabled()) {
-                logger.debug("mock-any-rest-api Response->[{}]", new ObjectMapper().writeValueAsString(mockAnyRestApiResponseBody));
+                logger.debug("mock-any-rest-api Response->[{}]",
+                        new ObjectMapper().writeValueAsString(
+                                mockAnyRestApiResponseBody));
             }
+
+            List<MockAnyRestApiGetResponseBean> mockAnyRestApiResponsePayload =
+                    Objects.requireNonNull(
+                            mockAnyRestApiResponseBody.getPayload());
 
             for (AnyDataModel anyDataModel : anyDataModelList) {
                 List<AnyPartialDataModel> anyPartialDataModelList = new ArrayList<>();
@@ -109,9 +119,10 @@ public class AnyGetService extends BaseService<
     }
 
     @Override
-    protected void execute(BaseRequestBean<List<String>> request,
-                           BaseResponseBean<List<AnyCalcOrGetResponseBean>> response,
-                           List<AnyDataModel> anyDataModels) {
+    protected void execute(
+            BaseRequestBean<List<String>> request,
+            BaseResponseBean<List<AnyCalcOrGetResponseBean>> response,
+            List<AnyDataModel> anyDataModels) {
 
         response.setStatusCode("STATUS-000-0000");
         response.setMessage("正常終了");

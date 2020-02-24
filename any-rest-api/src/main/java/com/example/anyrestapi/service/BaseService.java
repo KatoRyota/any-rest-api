@@ -40,7 +40,8 @@ public abstract class BaseService<
             List<AnyDataModel> anyDataModels = createIntermediateObject(request);
 
             if (logger.isDebugEnabled()) {
-                logger.debug("anyDataModels->[{}]", new ObjectMapper().writeValueAsString(anyDataModels));
+                logger.debug("Result of createIntermediateObject->[{}]",
+                        new ObjectMapper().writeValueAsString(anyDataModels));
             }
 
             execute(request, response, anyDataModels);

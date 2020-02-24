@@ -6,19 +6,32 @@ import com.example.anyrestapicore.bean.mockanyrestapi.response.MockAnyRestApiBas
 import com.example.anyrestapicore.bean.mockanyrestapi.response.payload.MockAnyRestApiGetResponseBean;
 import com.example.anyrestapicore.model.common.AnyDataModel;
 import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.core.env.Environment;
 import org.springframework.http.*;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Component
 public class AnyGetServiceHelper {
 
-    public ResponseEntity<MockAnyRestApiBaseResponseBean<List<MockAnyRestApiGetResponseBean>>> getAnyFromMockAnyRestApi(RestTemplate restTemplate,
-                                                                                                                        String url,
-                                                                                                                        List<AnyDataModel> anyDataModelList) {
+    private final Environment env;
+    private final RestTemplate restTemplate;
+
+    public AnyGetServiceHelper(
+            Environment env,
+            RestTemplate restTemplate) {
+
+        this.env = env;
+        this.restTemplate = restTemplate;
+    }
+
+    public ResponseEntity<MockAnyRestApiBaseResponseBean<List<MockAnyRestApiGetResponseBean>>> getAnyOfMockAnyRestApi(
+            List<AnyDataModel> anyDataModelList) {
+
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
 
@@ -37,7 +50,8 @@ public class AnyGetServiceHelper {
         mockAnyRestApiRequest.setPayload(mockAnyRestApiRequestPayload);
 
         return restTemplate.exchange(
-                url,
+                Objects.requireNonNull(
+                        env.getProperty("mockanyrestapi.url.getany")),
                 HttpMethod.POST,
                 new HttpEntity<>(mockAnyRestApiRequest, headers),
                 new ParameterizedTypeReference<>() {

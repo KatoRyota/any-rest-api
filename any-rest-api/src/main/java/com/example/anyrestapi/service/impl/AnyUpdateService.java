@@ -1,9 +1,8 @@
 package com.example.anyrestapi.service.impl;
 
+import com.example.anyrestapi.repository.AnyArtifactRepository;
 import com.example.anyrestapi.service.BaseService;
 import com.example.anyrestapi.service.impl.helper.AnyUpdateServiceHelper;
-import com.example.anyrestapicore.bean.mockanyrestapi.request.MockAnyRestApiBaseRequestBean;
-import com.example.anyrestapicore.bean.mockanyrestapi.request.payload.MockAnyRestApiUpdateRequestBean;
 import com.example.anyrestapicore.bean.mockanyrestapi.response.MockAnyRestApiBaseResponseBean;
 import com.example.anyrestapicore.bean.mockanyrestapi.response.payload.MockAnyRestApiUpdateResponseBean;
 import com.example.anyrestapicore.bean.request.BaseRequestBean;
@@ -12,13 +11,11 @@ import com.example.anyrestapicore.bean.response.BaseResponseBean;
 import com.example.anyrestapicore.bean.response.errors.ErrorBean;
 import com.example.anyrestapicore.bean.response.payload.AnyUpdateResponseBean;
 import com.example.anyrestapicore.model.common.AnyDataModel;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.core.env.Environment;
-import org.springframework.http.*;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,17 +27,16 @@ public class AnyUpdateService extends BaseService<
         BaseResponseBean<AnyUpdateResponseBean>> {
 
     private static final Logger logger = LoggerFactory.getLogger(AnyUpdateService.class);
-    private final Environment env;
     private final AnyUpdateServiceHelper helper;
-    private final RestTemplate restTemplate;
+    private final AnyArtifactRepository anyArtifactRepository;
 
-    public AnyUpdateService(Environment env,
-                            AnyUpdateServiceHelper helper,
-                            RestTemplate restTemplate) {
+    public AnyUpdateService(
+            AnyUpdateServiceHelper helper,
+            AnyArtifactRepository anyArtifactRepository) {
+
         super();
-        this.env = env;
         this.helper = helper;
-        this.restTemplate = restTemplate;
+        this.anyArtifactRepository = anyArtifactRepository;
     }
 
     @Override
@@ -49,67 +45,79 @@ public class AnyUpdateService extends BaseService<
     }
 
     @Override
-    protected boolean validate(BaseRequestBean<List<AnyUpdateRequestBean>> request,
-                               BaseResponseBean<AnyUpdateResponseBean> response) {
+    protected boolean validate(
+            BaseRequestBean<List<AnyUpdateRequestBean>> request,
+            BaseResponseBean<AnyUpdateResponseBean> response) {
+
         return true;
     }
 
     @Override
-    protected List<AnyDataModel> createIntermediateObject(BaseRequestBean<List<AnyUpdateRequestBean>> request) {
+    protected List<AnyDataModel> createIntermediateObject(
+            BaseRequestBean<List<AnyUpdateRequestBean>> request) {
 
         List<AnyDataModel> anyDataModelList = new ArrayList<>();
-        AnyDataModel anyDataModel = new AnyDataModel();
-        anyDataModel.id = "id-000-0000";
-        anyDataModel.name = "name-000-0000";
-        anyDataModel.type = "type-000-0000";
-        anyDataModelList.add(anyDataModel);
+
+        for (AnyUpdateRequestBean anyUpdateRequest : request.getPayload()) {
+            AnyDataModel anyDataModel = new AnyDataModel();
+            anyDataModel.id = anyUpdateRequest.getId();
+            anyDataModel.name = anyUpdateRequest.getName();
+            anyDataModel.type = anyUpdateRequest.getType();
+            anyDataModelList.add(anyDataModel);
+        }
 
         return anyDataModelList;
     }
 
     @Override
-    protected void execute(BaseRequestBean<List<AnyUpdateRequestBean>> request,
-                           BaseResponseBean<AnyUpdateResponseBean> response,
-                           List<AnyDataModel> anyDataModels) {
+    protected void execute(
+            BaseRequestBean<List<AnyUpdateRequestBean>> request,
+            BaseResponseBean<AnyUpdateResponseBean> response,
+            List<AnyDataModel> anyDataModels) {
 
-        String url = Objects.requireNonNull(env.getProperty("mockanyrestapi.url.updateany"));
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
+        try {
+            int[] updateCounts = anyArtifactRepository.update(anyDataModels);
 
-        MockAnyRestApiBaseRequestBean<List<MockAnyRestApiUpdateRequestBean>> mockAnyRestApiRequest = new MockAnyRestApiBaseRequestBean<>();
-        mockAnyRestApiRequest.setUserName("userName-000-0000");
-        mockAnyRestApiRequest.setAuthKey("authKey-000-0000");
-        List<MockAnyRestApiUpdateRequestBean> mockAnyRestApiRequestPayload = new ArrayList<>();
-        MockAnyRestApiUpdateRequestBean mockAnyRestApiRequestData = new MockAnyRestApiUpdateRequestBean();
-        mockAnyRestApiRequestData.setId("id-000-0000");
-        mockAnyRestApiRequestData.setName("name-000-0000");
-        mockAnyRestApiRequestData.setType("type-000-0000");
-        mockAnyRestApiRequestPayload.add(mockAnyRestApiRequestData);
-        mockAnyRestApiRequest.setPayload(mockAnyRestApiRequestPayload);
+            if (logger.isDebugEnabled()) {
+                logger.debug("DB Update Counts->[{}]",
+                        new ObjectMapper().writeValueAsString(updateCounts));
+            }
 
-        ResponseEntity<MockAnyRestApiBaseResponseBean<MockAnyRestApiUpdateResponseBean>> mockAnyRestApiResponse = restTemplate.exchange(
-                url,
-                HttpMethod.POST,
-                new HttpEntity<>(mockAnyRestApiRequest, headers),
-                new ParameterizedTypeReference<>() {
-                });
+            ResponseEntity<MockAnyRestApiBaseResponseBean<MockAnyRestApiUpdateResponseBean>> mockAnyRestApiResponse =
+                    helper.updateAnyOfMockAnyRestApi(
+                            anyDataModels);
 
-        MockAnyRestApiBaseResponseBean<MockAnyRestApiUpdateResponseBean> mockAnyRestApiResponseBody = Objects.requireNonNull(mockAnyRestApiResponse.getBody());
-        MockAnyRestApiUpdateResponseBean mockAnyRestApiResponsePayload = mockAnyRestApiResponseBody.getPayload();
+            MockAnyRestApiBaseResponseBean<MockAnyRestApiUpdateResponseBean> mockAnyRestApiResponseBody =
+                    Objects.requireNonNull(
+                            mockAnyRestApiResponse.getBody());
 
-        response.setStatusCode("statusCode-000-0000");
-        response.setMessage("message-000-0000");
+            if (logger.isDebugEnabled()) {
+                logger.debug("mock-any-rest-api Response->[{}]",
+                        new ObjectMapper().writeValueAsString(
+                                mockAnyRestApiResponseBody));
+            }
 
-        AnyUpdateResponseBean anyUpdateResponseBean = new AnyUpdateResponseBean();
-        anyUpdateResponseBean.setUpdateCount(mockAnyRestApiResponsePayload.getUpdateCount());
-        response.setPayload(anyUpdateResponseBean);
+            MockAnyRestApiUpdateResponseBean mockAnyRestApiResponsePayload =
+                    Objects.requireNonNull(
+                            mockAnyRestApiResponseBody.getPayload());
 
-        List<ErrorBean> errors = new ArrayList<>();
-        ErrorBean error = new ErrorBean();
-        error.setBindId("bindId-000-0000");
-        error.setCode("code-000-0000");
-        error.setMessage("message-000-0000");
-        errors.add(error);
-        response.setErrors(errors);
+            response.setStatusCode("STATUS-000-0000");
+            response.setMessage("正常終了");
+
+            AnyUpdateResponseBean anyUpdateResponse = new AnyUpdateResponseBean();
+            anyUpdateResponse.setUpdateCount(
+                    mockAnyRestApiResponsePayload.getUpdateCount());
+            response.setPayload(anyUpdateResponse);
+
+            List<ErrorBean> errors = new ArrayList<>();
+            ErrorBean error = new ErrorBean();
+            error.setCode("ERROR-000-0000");
+            error.setBindId("ID-000-0000");
+            error.setMessage("エラーが発生しました。");
+            errors.add(error);
+            response.setErrors(errors);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 }
