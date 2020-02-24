@@ -24,7 +24,9 @@ public class MockAnyGetService extends BaseService<
     private static final Logger logger = LoggerFactory.getLogger(MockAnyGetService.class);
     private final Environment env;
 
-    public MockAnyGetService(Environment env) {
+    public MockAnyGetService(
+            Environment env) {
+
         super();
         this.env = env;
     }
@@ -35,20 +37,26 @@ public class MockAnyGetService extends BaseService<
     }
 
     @Override
-    protected boolean validate(BaseRequestBean<List<String>> request,
-                               BaseResponseBean<List<AnyCalcOrGetResponseBean>> response) {
+    protected boolean validate(
+            BaseRequestBean<List<String>> request,
+            BaseResponseBean<List<AnyCalcOrGetResponseBean>> response) {
+
         return true;
     }
 
     @Override
-    protected List<AnyDataModel> createIntermediateObject(BaseRequestBean<List<String>> request) {
+    protected List<AnyDataModel> createIntermediateObject(
+            BaseRequestBean<List<String>> request) {
+
         return null;
     }
 
     @Override
-    protected void execute(BaseRequestBean<List<String>> request,
-                           BaseResponseBean<List<AnyCalcOrGetResponseBean>> response,
-                           List<AnyDataModel> anyDataModels) {
+    protected void execute(
+            BaseRequestBean<List<String>> request,
+            BaseResponseBean<List<AnyCalcOrGetResponseBean>> response,
+            List<AnyDataModel> anyDataModels) {
+
         try {
             BaseResponseBean<List<AnyCalcOrGetResponseBean>> mockResponse = new ObjectMapper().readValue(
                     new ClassPathResource("mockGetAny-response.json").getFile(),

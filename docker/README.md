@@ -158,12 +158,12 @@ curl -s -X POST \
             "authKey":"test",
             "payload":[
                 {
-                    id: "ID-000-0000",
-                    name: "name-222-2222",
-                    type: "TYPE-222-2222"
+                    "id":"ID-000-0000",
+                    "name":"NAME-222-2222",
+                    "type":"TYPE-222-2222"
                 }
             ]
         }
     ' \
-    http://192.168.99.100:50000/getAny
+    http://192.168.99.100:50000/updateAny
 ```

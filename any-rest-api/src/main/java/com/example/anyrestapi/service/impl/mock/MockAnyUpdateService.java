@@ -26,7 +26,9 @@ public class MockAnyUpdateService extends BaseService<
     private static final Logger logger = LoggerFactory.getLogger(MockAnyUpdateService.class);
     private final Environment env;
 
-    public MockAnyUpdateService(Environment env) {
+    public MockAnyUpdateService(
+            Environment env) {
+
         super();
         this.env = env;
     }
@@ -37,20 +39,26 @@ public class MockAnyUpdateService extends BaseService<
     }
 
     @Override
-    protected boolean validate(BaseRequestBean<List<AnyUpdateRequestBean>> request,
-                               BaseResponseBean<AnyUpdateResponseBean> response) {
+    protected boolean validate(
+            BaseRequestBean<List<AnyUpdateRequestBean>> request,
+            BaseResponseBean<AnyUpdateResponseBean> response) {
+
         return true;
     }
 
     @Override
-    protected List<AnyDataModel> createIntermediateObject(BaseRequestBean<List<AnyUpdateRequestBean>> request) {
+    protected List<AnyDataModel> createIntermediateObject(
+            BaseRequestBean<List<AnyUpdateRequestBean>> request) {
+
         return null;
     }
 
     @Override
-    protected void execute(BaseRequestBean<List<AnyUpdateRequestBean>> request,
-                           BaseResponseBean<AnyUpdateResponseBean> response,
-                           List<AnyDataModel> anyDataModels) {
+    protected void execute(
+            BaseRequestBean<List<AnyUpdateRequestBean>> request,
+            BaseResponseBean<AnyUpdateResponseBean> response,
+            List<AnyDataModel> anyDataModels) {
+
         try {
             BaseResponseBean<List<AnyCalcOrGetResponseBean>> mockResponse = new ObjectMapper().readValue(
                     new ClassPathResource("mockUpdateAny-response.json").getFile(),

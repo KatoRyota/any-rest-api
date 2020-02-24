@@ -25,7 +25,9 @@ public class MockAnyCalcService extends BaseService<
     private static final Logger logger = LoggerFactory.getLogger(MockAnyCalcService.class);
     private final Environment env;
 
-    public MockAnyCalcService(Environment env) {
+    public MockAnyCalcService(
+            Environment env) {
+
         super();
         this.env = env;
     }
@@ -36,20 +38,26 @@ public class MockAnyCalcService extends BaseService<
     }
 
     @Override
-    protected boolean validate(BaseRequestBean<List<AnyCalcRequestBean>> request,
-                               BaseResponseBean<List<AnyCalcOrGetResponseBean>> response) {
+    protected boolean validate(
+            BaseRequestBean<List<AnyCalcRequestBean>> request,
+            BaseResponseBean<List<AnyCalcOrGetResponseBean>> response) {
+
         return true;
     }
 
     @Override
-    protected List<AnyDataModel> createIntermediateObject(BaseRequestBean<List<AnyCalcRequestBean>> request) {
+    protected List<AnyDataModel> createIntermediateObject(
+            BaseRequestBean<List<AnyCalcRequestBean>> request) {
+
         return null;
     }
 
     @Override
-    protected void execute(BaseRequestBean<List<AnyCalcRequestBean>> request,
-                           BaseResponseBean<List<AnyCalcOrGetResponseBean>> response,
-                           List<AnyDataModel> anyDataModel) {
+    protected void execute(
+            BaseRequestBean<List<AnyCalcRequestBean>> request,
+            BaseResponseBean<List<AnyCalcOrGetResponseBean>> response,
+            List<AnyDataModel> anyDataModel) {
+
         try {
             BaseResponseBean<List<AnyCalcOrGetResponseBean>> mockResponse = new ObjectMapper().readValue(
                     new ClassPathResource("mockCalcAny-response.json").getFile(),

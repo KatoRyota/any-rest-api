@@ -28,12 +28,13 @@ public class ApplicationController {
     private final MockAnyGetService mockAnyGetService;
     private final MockAnyUpdateService mockAnyUpdateService;
 
-    public ApplicationController(AnyCalcService anyCalcService,
-                                 AnyGetService anyGetService,
-                                 AnyUpdateService anyUpdateService,
-                                 MockAnyCalcService mockAnyCalcService,
-                                 MockAnyGetService mockAnyGetService,
-                                 MockAnyUpdateService mockAnyUpdateService) {
+    public ApplicationController(
+            AnyCalcService anyCalcService,
+            AnyGetService anyGetService,
+            AnyUpdateService anyUpdateService,
+            MockAnyCalcService mockAnyCalcService,
+            MockAnyGetService mockAnyGetService,
+            MockAnyUpdateService mockAnyUpdateService) {
 
         this.anyCalcService = anyCalcService;
         this.anyGetService = anyGetService;

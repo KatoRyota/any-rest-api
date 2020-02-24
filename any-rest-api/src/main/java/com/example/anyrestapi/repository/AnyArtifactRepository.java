@@ -17,11 +17,14 @@ public class AnyArtifactRepository {
 
     private final NamedParameterJdbcTemplate jdbcTemplate;
 
-    public AnyArtifactRepository(NamedParameterJdbcTemplate jdbcTemplate) {
+    public AnyArtifactRepository(
+            NamedParameterJdbcTemplate jdbcTemplate) {
+
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    public List<AnyArtifactRecordBean> selectUsingIdList(List<String> idList) {
+    public List<AnyArtifactRecordBean> selectUsingIdList(
+            List<String> idList) {
 
         String sql = "" +
                 "select id, name, type " +
@@ -35,7 +38,8 @@ public class AnyArtifactRepository {
                 new BeanPropertyRowMapper<>(AnyArtifactRecordBean.class));
     }
 
-    public List<AnyArtifactRecordBean> selectUsingAnyArtifactRecordList(List<AnyCalcRequestBean> anyCalcRequestList) {
+    public List<AnyArtifactRecordBean> selectUsingAnyArtifactRecordList(
+            List<AnyCalcRequestBean> anyCalcRequestList) {
 
         String sql = "" +
                 "select id, name, type " +
@@ -55,7 +59,8 @@ public class AnyArtifactRepository {
                 new BeanPropertyRowMapper<>(AnyArtifactRecordBean.class));
     }
 
-    public int[] update(List<AnyDataModel> anyDataModels) {
+    public int[] update(
+            List<AnyDataModel> anyDataModels) {
 
         String sql = "" +
                 "update any_artifact " +
