@@ -3,6 +3,7 @@ package com.example.anyrestapi.repository;
 import com.example.anyrestapicore.bean.database.AnyArtifactRecordBean;
 import com.example.anyrestapicore.bean.request.payload.AnyCalcRequestBean;
 import com.example.anyrestapicore.model.common.AnyDataModel;
+import com.example.anyrestapicore.model.common.partial.AnyPartialDataModel;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -60,7 +61,7 @@ public class AnyArtifactRepository {
     }
 
     public int[] update(
-            List<AnyDataModel> anyDataModels) {
+            List<AnyDataModel> anyDataModelList) {
 
         String sql = "" +
                 "update any_artifact " +
@@ -70,12 +71,14 @@ public class AnyArtifactRepository {
 
         List<AnyArtifactRecordBean> anyArtifactRecordList = new ArrayList<>();
 
-        for (AnyDataModel anyDataModel : anyDataModels) {
-            AnyArtifactRecordBean anyArtifactRecord = new AnyArtifactRecordBean();
-            anyArtifactRecord.setId(anyDataModel.id);
-            anyArtifactRecord.setName(anyDataModel.name);
-            anyArtifactRecord.setType(anyDataModel.type);
-            anyArtifactRecordList.add(anyArtifactRecord);
+        for (AnyDataModel anyDataModel : anyDataModelList) {
+            for (AnyPartialDataModel anyPartialDataModel : anyDataModel.anyPartialDataModels) {
+                AnyArtifactRecordBean anyArtifactRecord = new AnyArtifactRecordBean();
+                anyArtifactRecord.setId(anyPartialDataModel.id);
+                anyArtifactRecord.setName(anyPartialDataModel.name);
+                anyArtifactRecord.setType(anyPartialDataModel.type);
+                anyArtifactRecordList.add(anyArtifactRecord);
+            }
         }
 
         return jdbcTemplate.batchUpdate(

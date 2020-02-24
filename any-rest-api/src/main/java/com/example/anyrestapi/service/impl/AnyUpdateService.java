@@ -11,6 +11,7 @@ import com.example.anyrestapicore.bean.response.BaseResponseBean;
 import com.example.anyrestapicore.bean.response.errors.ErrorBean;
 import com.example.anyrestapicore.bean.response.payload.AnyUpdateResponseBean;
 import com.example.anyrestapicore.model.common.AnyDataModel;
+import com.example.anyrestapicore.model.common.partial.AnyPartialDataModel;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -63,6 +64,15 @@ public class AnyUpdateService extends BaseService<
             anyDataModel.id = anyUpdateRequest.getId();
             anyDataModel.name = anyUpdateRequest.getName();
             anyDataModel.type = anyUpdateRequest.getType();
+
+            List<AnyPartialDataModel> anyPartialDataModelList = new ArrayList<>();
+            AnyPartialDataModel anyPartialDataModel = new AnyPartialDataModel();
+            anyPartialDataModel.id = anyUpdateRequest.getId();
+            anyPartialDataModel.name = anyUpdateRequest.getName();
+            anyPartialDataModel.type = anyUpdateRequest.getType();
+            anyPartialDataModelList.add(anyPartialDataModel);
+
+            anyDataModel.anyPartialDataModels = anyPartialDataModelList;
             anyDataModelList.add(anyDataModel);
         }
 

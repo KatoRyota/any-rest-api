@@ -5,6 +5,7 @@ import com.example.anyrestapicore.bean.mockanyrestapi.request.payload.MockAnyRes
 import com.example.anyrestapicore.bean.mockanyrestapi.response.MockAnyRestApiBaseResponseBean;
 import com.example.anyrestapicore.bean.mockanyrestapi.response.payload.MockAnyRestApiUpdateResponseBean;
 import com.example.anyrestapicore.model.common.AnyDataModel;
+import com.example.anyrestapicore.model.common.partial.AnyPartialDataModel;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.core.env.Environment;
 import org.springframework.http.*;
@@ -42,11 +43,13 @@ public class AnyUpdateServiceHelper {
         List<MockAnyRestApiUpdateRequestBean> mockAnyRestApiRequestPayload = new ArrayList<>();
 
         for (AnyDataModel anyDataModel : anyDataModelList) {
-            MockAnyRestApiUpdateRequestBean mockAnyRestApiRequestData = new MockAnyRestApiUpdateRequestBean();
-            mockAnyRestApiRequestData.setId(anyDataModel.id);
-            mockAnyRestApiRequestData.setName(anyDataModel.name);
-            mockAnyRestApiRequestData.setType(anyDataModel.type);
-            mockAnyRestApiRequestPayload.add(mockAnyRestApiRequestData);
+            for (AnyPartialDataModel anyPartialDataModel : anyDataModel.anyPartialDataModels) {
+                MockAnyRestApiUpdateRequestBean mockAnyRestApiRequestData = new MockAnyRestApiUpdateRequestBean();
+                mockAnyRestApiRequestData.setId(anyPartialDataModel.id);
+                mockAnyRestApiRequestData.setName(anyPartialDataModel.name);
+                mockAnyRestApiRequestData.setType(anyPartialDataModel.type);
+                mockAnyRestApiRequestPayload.add(mockAnyRestApiRequestData);
+            }
         }
 
         mockAnyRestApiRequest.setPayload(mockAnyRestApiRequestPayload);
