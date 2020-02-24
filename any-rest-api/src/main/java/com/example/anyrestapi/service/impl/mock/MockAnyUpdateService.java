@@ -60,10 +60,11 @@ public class MockAnyUpdateService extends BaseService<
             List<AnyDataModel> anyDataModels) {
 
         try {
-            BaseResponseBean<List<AnyCalcOrGetResponseBean>> mockResponse = new ObjectMapper().readValue(
-                    new ClassPathResource("mockUpdateAny-response.json").getFile(),
-                    new TypeReference<>() {
-                    });
+            BaseResponseBean<List<AnyCalcOrGetResponseBean>> mockResponse =
+                    new ObjectMapper().readValue(
+                            new ClassPathResource("mockUpdateAny-response.json").getFile(),
+                            new TypeReference<>() {
+                            });
 
             BeanUtils.copyProperties(mockResponse, response);
 

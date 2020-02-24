@@ -24,7 +24,9 @@ public class MockAnyRestApiUpdateService extends BaseMockAnyRestApiService<
     private static final Logger logger = LoggerFactory.getLogger(MockAnyRestApiUpdateService.class);
     private final Environment env;
 
-    public MockAnyRestApiUpdateService(Environment env) {
+    public MockAnyRestApiUpdateService(
+            Environment env) {
+
         super();
         this.env = env;
     }
@@ -35,19 +37,24 @@ public class MockAnyRestApiUpdateService extends BaseMockAnyRestApiService<
     }
 
     @Override
-    protected boolean validate(MockAnyRestApiBaseRequestBean<List<MockAnyRestApiUpdateRequestBean>> request,
-                               MockAnyRestApiBaseResponseBean<MockAnyRestApiUpdateResponseBean> response) {
+    protected boolean validate(
+            MockAnyRestApiBaseRequestBean<List<MockAnyRestApiUpdateRequestBean>> request,
+            MockAnyRestApiBaseResponseBean<MockAnyRestApiUpdateResponseBean> response) {
+
         return true;
     }
 
     @Override
-    protected void execute(MockAnyRestApiBaseRequestBean<List<MockAnyRestApiUpdateRequestBean>> request,
-                           MockAnyRestApiBaseResponseBean<MockAnyRestApiUpdateResponseBean> response) {
+    protected void execute(
+            MockAnyRestApiBaseRequestBean<List<MockAnyRestApiUpdateRequestBean>> request,
+            MockAnyRestApiBaseResponseBean<MockAnyRestApiUpdateResponseBean> response) {
+
         try {
-            MockAnyRestApiBaseResponseBean<MockAnyRestApiUpdateResponseBean> mockResponse = new ObjectMapper().readValue(
-                    new ClassPathResource("updateAny-response.json").getFile(),
-                    new TypeReference<>() {
-                    });
+            MockAnyRestApiBaseResponseBean<MockAnyRestApiUpdateResponseBean> mockResponse =
+                    new ObjectMapper().readValue(
+                            new ClassPathResource("updateAny-response.json").getFile(),
+                            new TypeReference<>() {
+                            });
 
             BeanUtils.copyProperties(mockResponse, response);
 

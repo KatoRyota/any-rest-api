@@ -10,7 +10,9 @@ import java.io.IOException;
 public class ReloadablePropertySourceFactory extends DefaultPropertySourceFactory {
 
     @Override
-    public PropertySource<?> createPropertySource(String name, EncodedResource encodedResource) throws IOException {
+    public PropertySource<?> createPropertySource(
+            String name,
+            EncodedResource encodedResource) throws IOException {
 
         Resource resource = encodedResource.getResource();
         String path = resource.getFile().getAbsolutePath();

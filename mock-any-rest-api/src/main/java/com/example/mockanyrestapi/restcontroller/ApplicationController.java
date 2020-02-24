@@ -20,8 +20,9 @@ public class ApplicationController {
     private final MockAnyRestApiGetService anyGetService;
     private final MockAnyRestApiUpdateService anyUpdateService;
 
-    public ApplicationController(MockAnyRestApiGetService anyGetService,
-                                 MockAnyRestApiUpdateService anyUpdateService) {
+    public ApplicationController(
+            MockAnyRestApiGetService anyGetService,
+            MockAnyRestApiUpdateService anyUpdateService) {
 
         this.anyGetService = anyGetService;
         this.anyUpdateService = anyUpdateService;
