@@ -147,3 +147,23 @@ To access OEM Express, start your browser and follow the URL:
 
 	https://192.168.99.100:5500/em/
 ```
+
+## memo
+```shell script
+curl -s -X POST \
+    -H "Content-Type: application/json" \
+    -d '
+        {
+            "userName":"test",
+            "authKey":"test",
+            "payload":[
+                {
+                    id: "ID-000-0000",
+                    name: "name-222-2222",
+                    type: "TYPE-222-2222"
+                }
+            ]
+        }
+    ' \
+    http://192.168.99.100:50000/getAny
+```

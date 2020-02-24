@@ -59,10 +59,9 @@ public class AnyArtifactRepository {
 
         String sql = "" +
                 "update any_artifact " +
-                "set id = :id, " +
-                "    name = :name, " +
+                "set name = :name, " +
                 "    type = :type " +
-                "where id = :idList";
+                "where id = :id";
 
         List<AnyArtifactRecordBean> anyArtifactRecordList = new ArrayList<>();
 
